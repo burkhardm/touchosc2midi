@@ -1,10 +1,10 @@
 touchosc2midi
 ==============================================================
-> a TouchOSC Bridge clone, aimed at linux, written in python.
+A TouchOSC Bridge clone, aimed at Linux, written in Python.
 
 Motivation
 ----------
-I wanted to have a TouchOSC Bridge running on a raspberrypi. After researching the options and running into several
+I wanted to have a TouchOSC Bridge running on a Raspberry Pi. After researching the options and running into several
 deadends, I figured out, I need to write my own. Specifically this program aims to achieve the following:
 
 - it works on linux
@@ -98,6 +98,8 @@ OSC Configuration
 Docker
 ------
 
+### How-to build manually
+
 The git repository contains a `Dockerfile`. To use it:
 
     cd docker
@@ -109,6 +111,18 @@ Above builds a container with all OS dependencies and `touchosc2midi` installed.
     docker run -p 0.0.0.0:12101:12101/udp --device=/dev/snd/seq:/dev/snd/seq touchosc2midi:latest
 
 Note, that when using docker, the `zeroconf` service announcement does not work, so you'll have to configure your ip address manually on the touchOSC device.
+
+### How-to run on a Raspberry Pi
+
+Building `touchosc2midi` on a Raspberry Pi takes quite a long time. Therefore, an image is provided via Docker Hub: [burkhardm/touchosc2midi:arm-latest](https://hub.docker.com/r/burkhardm/touchosc2midi)
+
+Execute the following command to list virtual ports for midi-in and midi-out:
+
+`docker run --device=/dev/snd/seq:/dev/snd/seq burkhardm/touchosc2midi:arm-latest list ports`
+
+Execute the following command to run touchosc2midi and connecting midi-in and midi-out to virtual ports:
+
+`docker run -p 0.0.0.0:12101:12101/udp --device=/dev/snd/seq:/dev/snd/seq burkhardm/touchosc2midi:arm-latest --midi-in=1 --midi-out=0`
 
 
 License
